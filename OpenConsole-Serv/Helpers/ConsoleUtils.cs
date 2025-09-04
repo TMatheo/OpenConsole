@@ -44,8 +44,8 @@ namespace OpenConsole.Helpers
                 {
                     Console.ForegroundColor = consoleColor;
                     Console.Write(input.Substring(startIndex));
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
                 Console.ResetColor();
             }
         }
@@ -102,7 +102,7 @@ namespace OpenConsole.Helpers
     {
         public static void Log(string a, string b)
         {
-            ConsoleUtils.PrintLogColored($"<color={vars.TimestartendColor}>[<color={vars.TimeColor}>{DateTime.Now.ToShortTimeString()}<color={vars.TimestartendColor}>]:[<color={vars.ModuleColor}>{a}<color={vars.TimestartendColor}>]:{b}");
+            ConsoleUtils.PrintLogColored($"<color={vars.TimestartendColor}>[<color={vars.TimeColor}>{DateTime.Now.ToShortTimeString()}<color={vars.TimestartendColor}>]:[{a}<color={vars.TimestartendColor}>]:{b}");
         }
 
         public static void LogG(string text)

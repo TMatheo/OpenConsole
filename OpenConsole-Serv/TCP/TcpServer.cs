@@ -13,7 +13,7 @@ namespace OpenConsole.TCP
         {
             TcpListener listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
-            CLog.Log("Server",$"Server started on port {port}...");
+            CLog.Log("Server", $"Server started on port {port}...");
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
@@ -22,6 +22,7 @@ namespace OpenConsole.TCP
                 t.Start(client);
             }
         }
+
         static void HandleClient(object obj)
         {
             TcpClient client = (TcpClient)obj;
@@ -42,16 +43,25 @@ namespace OpenConsole.TCP
                         CLog.Log("Server", $"[Client {client.Client.RemoteEndPoint}] Invalid UTF-8 data: {ex.Message}");
                         break;
                     }
+
                     if (string.IsNullOrWhiteSpace(message))
                     {
                         CLog.Log("Server", $"[Client {client.Client.RemoteEndPoint}] Sent empty or whitespace message. Ignored.");
                         continue;
                     }
+
+                    // Ignore exactly ------------------------------
+                    if (message.Trim() == "------------------------------")
+                    {
+                        continue;
+                    }
+
                     if (message.Length > 1024)
                     {
                         CLog.Log("Server", $"[Client {client.Client.RemoteEndPoint}] Message too long. Truncated.");
                         message = message.Substring(0, 1024);
                     }
+
                     string moduleName = "Server";
                     string logMessage = message;
                     int separatorIndex = message.IndexOf(" - ");
@@ -60,6 +70,7 @@ namespace OpenConsole.TCP
                         moduleName = message.Substring(0, separatorIndex).Trim();
                         logMessage = message.Substring(separatorIndex + 3).Trim();
                     }
+
                     CLog.Log(moduleName, logMessage);
                 }
             }
